@@ -1,27 +1,28 @@
 package com.coderhouse.clientservice.model;
-
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @Entity
 @Table (name="clients")
 public class Client {
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "lastName")
     private String lastName;
-    private LocalDateTime birthDate;
+    @Column(name = "birthDate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate birthDate;
 
     // Constructor
-    public Client(int id, String name, String lastName, LocalDateTime birthDate) {
+    public Client(int id, String name, String lastName, LocalDate birthDate) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;

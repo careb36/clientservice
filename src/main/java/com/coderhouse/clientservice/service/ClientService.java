@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Period;
 
 
@@ -25,7 +24,8 @@ public class ClientService {
                 .orElse("Cliente no encontrado con ID: " + id);
     }
 
-    public int calculateAge(LocalDateTime birthDate) {
-        return Period.between(LocalDate.from(birthDate), LocalDate.now()).getYears();
+    public int calculateAge(LocalDate birthDate) {
+        LocalDate birthLocalDate = LocalDate.parse(birthDate.toString());
+        return Period.between(birthLocalDate, LocalDate.now()).getYears();
     }
 }
