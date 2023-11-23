@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @SpringBootApplication
 public class ClientserviceApplication implements CommandLineRunner {
@@ -20,8 +21,8 @@ public class ClientserviceApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		LocalDate birthDate = LocalDate.of(1983,10,29);
-		System.out.println(clientService.calcEdge(birthDate));
+		LocalDateTime birthDate = LocalDate.of(1983,10,29).atStartOfDay();
+		System.out.println(clientService.calculateAge(birthDate));
 
 	}
 }
