@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @Entity
-@Table(name = "client") // Ensure table name matches your database schema
+@Table(name = "clients") // Ensure table name matches your database schema
 public class Client {
 
     @Id
