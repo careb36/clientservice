@@ -1,6 +1,5 @@
 package com.coderhouse.clientservice.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,10 +14,10 @@ public class InvoiceDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "invoice_id")
+    @Column(name = "invoices_id")
     private int invoiceId;
 
-    @Column(name = "product_id")
+    @Column(name = "products_id")
     private int productId;
 
     @Column(name = "quantity")
