@@ -8,28 +8,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.coderhouse.clientservice.dto.ClientDTO;
 
 /**
  * REST Controller for managing client-related operations.
  * This controller provides endpoints for creating a new client and retrieving client details.
  */
-@RequestMapping(path = "api/clients")
 @RestController
+@RequestMapping(path = "api/clients")
 public class ClientController {
 
     @Autowired
     private ClientService clientService;
 
-    /**
-     * Endpoint for creating a new client.
-     * Accepts a client object in the request body and saves it using the client service.
-     *
-     * @param client Client object to be created.
-     * @return ResponseEntity with created client and HTTP status code.
-     */
     @PostMapping("/")
-    public ResponseEntity<Client> create(@RequestBody Client client) {
-        return new ResponseEntity<>(this.clientService.create(client), HttpStatus.CREATED);
+    public ResponseEntity<ClientDTO> create(@RequestBody Client client) {
+        ClientDTO createdClientDTO = clientService.create(client);
+        return new ResponseEntity<>(createdClientDTO, HttpStatus.CREATED);
     }
 
     /**
@@ -41,11 +36,8 @@ public class ClientController {
      * @return ResponseEntity with client details as JSON string and HTTP status code.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<String> findById(@PathVariable Long id) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        String result = clientService.findById(id);
-        return new ResponseEntity<>(result, headers, HttpStatus.OK);
+    public ResponseEntity<ClientDTO> findById(@PathVariable Long id) {
+        ClientDTO clientDTO = clientService.findById(id);
+        return new ResponseEntity<>(clientDTO, HttpStatus.OK);
     }
 }
