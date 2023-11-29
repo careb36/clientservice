@@ -1,45 +1,50 @@
 package com.coderhouse.clientservice.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.Data;
-
-import java.time.LocalDate;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-/**
- * Class representing a client in the system.
- */
+import lombok.Data;
+
 @Data
 @Entity
-@Table(name = "clients") // Ensure table name matches your database schema
+@Table(name = "clients")
 public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id; // Unique identifier for the client
+    private Long id;
 
+    @NotBlank(message = "Name cannot be blank")
+    @Size(max = 55, message = "Name must be less than 55 characters")
     @Column(name = "name")
-    private String name; // Client's first name
+    private String name;
 
+    @NotBlank(message = "Last name cannot be blank")
+    @Size(max = 55, message = "Last name must be less than 55 characters")
     @Column(name = "last_name")
-    private String lastName; // Client's last name
+    private String lastName;
 
-    @Column(name = "birth_date")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate birthDate; // Client's date of birth, formatted as yyyy-MM-dd
+    @Column(name = "birth_date", nullable = false)
+    private LocalDateTime birthDate;
 
-    @Column(name = "email")
-    private String email; // Client's email address
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email should be valid")
+    @Column(name = "email", unique = true)
+    private String email;
 
+    @Size(max = 55, message = "Address must be less than 55 characters")
     @Column(name = "address")
-    private String address; // Client's physical address
+    private String address;
 
+    @Size(max = 20, message = "Telephone must be less than 20 characters")
     @Column(name = "telephone")
-    private String telephone; // Client's telephone number
+    private String telephone;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt; // Timestamp when the client was created
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
     // Lombok will generate constructors, getters, and setters
 

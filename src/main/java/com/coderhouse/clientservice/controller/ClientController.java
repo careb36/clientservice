@@ -1,43 +1,44 @@
 package com.coderhouse.clientservice.controller;
 
+import com.coderhouse.clientservice.dto.ClientDTO;
 import com.coderhouse.clientservice.model.Client;
 import com.coderhouse.clientservice.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.coderhouse.clientservice.dto.ClientDTO;
+import jakarta.validation.Valid;
 
-/**
- * REST Controller for managing client-related operations.
- * This controller provides endpoints for creating a new client and retrieving client details.
- */
 @RestController
-@RequestMapping(path = "api/clients")
+@RequestMapping("/api/clients")
 public class ClientController {
 
     @Autowired
     private ClientService clientService;
 
-    @PostMapping("/")
-    public ResponseEntity<ClientDTO> create(@RequestBody Client client) {
-        ClientDTO createdClientDTO = clientService.create(client);
-        return new ResponseEntity<>(createdClientDTO, HttpStatus.CREATED);
+    @PostMapping
+    public ResponseEntity<ClientDTO> createClient(@Valid @RequestBody Client client) {
+        ClientDTO newClient = clientService.create(client);
+        return new ResponseEntity<>(newClient, HttpStatus.CREATED);
     }
 
-    /**
-     * Endpoint for retrieving a client by ID.
-     * Fetches client details from the client service. If the client is found,
-     * returns the client details as a JSON string along with HTTP status OK.
-     *
-     * @param id The ID of the client to be retrieved.
-     * @return ResponseEntity with client details as JSON string and HTTP status code.
-     */
     @GetMapping("/{id}")
-    public ResponseEntity<ClientDTO> findById(@PathVariable Long id) {
-        ClientDTO clientDTO = clientService.findById(id);
-        return new ResponseEntity<>(clientDTO, HttpStatus.OK);
+    public ResponseEntity<ClientDTO> getClientById(@PathVariable Long id) {
+        ClientDTO client = clientService.findById(id);
+        return new ResponseEntity<>(client, HttpStatus.OK);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ClientDTO> updateClient(@PathVariable Long id, @Valid @RequestBody Client clientDetails) {
+        ClientDTO updatedClient = clientService.update(id, clientDetails);
+        return new ResponseEntity<>(updatedClient, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
+        clientService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
+

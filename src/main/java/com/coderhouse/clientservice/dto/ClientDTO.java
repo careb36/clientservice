@@ -2,6 +2,7 @@ package com.coderhouse.clientservice.dto;
 
 import lombok.Data;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class ClientDTO {
@@ -13,9 +14,6 @@ public class ClientDTO {
     private String email;
     private String address;
     private String telephone;
-
-    public void setId(int id) {
-    }
 
     // Lombok generará automáticamente los getters y setters para todos los campos
 }
