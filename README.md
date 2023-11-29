@@ -20,7 +20,7 @@ This is a Spring Boot application designed for managing client information. It p
    git clone [repository URL]
    mvn spring-boot:run
 
-### The application will be available at http://localhost:8080.
+##### The application will be available at http://localhost:9500.
 
 ## API Endpoints
 - POST /api/clients/ - Create a new client.
