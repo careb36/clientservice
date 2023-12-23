@@ -38,6 +38,19 @@ public class ProductService {
         return convertToDTO(updatedProduct);
     }
 
+    public ProductDTO updateStock(int productId, int quantity) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found with ID: " + productId));
+        int newStock = product.getStock() - quantity;
+        if (newStock < 0) {
+            throw new RuntimeException("Insufficient stock for product ID: " + productId);
+        }
+        product.setStock(newStock);
+        Product updatedProduct = productRepository.save(product);
+        return convertToDTO(updatedProduct);
+    }
+
+
     // Métodos de conversión
 
     private ProductDTO convertToDTO(Product product) {

@@ -62,6 +62,4 @@ public class WorldClock {
     public void setServiceResponse(String serviceResponse) {
         this.serviceResponse = serviceResponse;
     }
-
-
 }
