@@ -36,6 +36,7 @@ public class ClientController {
      * @param client The client object to be created, validated by @Valid annotation.
      * @return ResponseEntity containing the created ClientDTO and HTTP status CREATED.
      */
+    @Valid
     @PostMapping
     public ResponseEntity<ClientDTO> createClient(@Valid @RequestBody Client client) {
         ClientDTO newClient = clientService.create(client);
@@ -63,6 +64,7 @@ public class ClientController {
      * @param clientDetails The client object containing updated fields, validated by @Valid annotation.
      * @return ResponseEntity containing the updated ClientDTO and HTTP status OK.
      */
+    @Valid
     @PutMapping("/{id}")
     public ResponseEntity<ClientDTO> updateClient(@PathVariable Long id, @Valid @RequestBody Client clientDetails) {
         ClientDTO updatedClient = clientService.update(id, clientDetails);

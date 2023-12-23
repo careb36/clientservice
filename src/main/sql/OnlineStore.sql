@@ -29,6 +29,7 @@ CREATE TABLE invoices
 (
     id         INT AUTO_INCREMENT PRIMARY KEY,
     clients_id INT            NOT NULL,
+    quantity INT            NOT NULL,
     total      DECIMAL(10, 2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (clients_id) REFERENCES clients (id)
@@ -41,6 +42,7 @@ CREATE TABLE invoices_details
     products_id INT            NOT NULL,
     quantity    INT            NOT NULL,
     price       DECIMAL(10, 2) NOT NULL,
+    description VARCHAR(100)   NOT NULL,
     FOREIGN KEY (invoices_id) REFERENCES invoices (id),
     FOREIGN KEY (products_id) REFERENCES products (id)
 );

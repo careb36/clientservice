@@ -1,5 +1,6 @@
 package com.coderhouse.clientservice.model;
 
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -26,7 +27,12 @@ public class InvoiceDetail {
     @Column(name = "price")
     private BigDecimal price;
 
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
     public InvoiceDetail() {
     }
+
+    // Lombok will automatically generate the getters and setters for all fields
 }
 

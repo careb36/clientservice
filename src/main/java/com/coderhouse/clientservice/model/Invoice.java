@@ -19,6 +19,9 @@ public class Invoice {
     @Column(name = "clients_id")
     private int clientId;
 
+    @Column(name = "quantity")
+    private int quantity;
+
     @Column(name = "total")
     private BigDecimal total;
 

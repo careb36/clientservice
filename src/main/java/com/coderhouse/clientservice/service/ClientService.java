@@ -117,7 +117,7 @@ public class ClientService {
     /**
      * Updates the fields of a Client entity with values from another Client object.
      *
-     * @param client         The Client entity to be updated.
+     * @param client        The Client entity to be updated.
      * @param clientDetails The Client object containing updated values.
      */
     private void updateClientDetails(Client client, Client clientDetails) {
@@ -128,5 +128,6 @@ public class ClientService {
         client.setAddress(clientDetails.getAddress());
         client.setTelephone(clientDetails.getTelephone());
     }
+
 }
 
