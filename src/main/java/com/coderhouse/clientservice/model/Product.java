@@ -1,13 +1,23 @@
 package com.coderhouse.clientservice.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
+/**
+ * Entity class representing a product in the online store system.
+ * This class maps to the 'products' table in the database and includes
+ * fields for product details such as name, price, and stock.
+ * <p>
+ * Products are the items available for sale in the store.
+ * <p>
+ * <p>
+ * The @Data annotation from Lombok automatically generates getters, setters,
+ * and other common methods like equals, hashCode, and toString.
+ * <p>
+ * @author: Carolina Pereira
+ */
 @Data
 @Entity
 @Table(name = "products")
@@ -28,10 +38,6 @@ public class Product {
 
     @Column(name = "stock")
     private int stock;
-
-    @Column(name = "created_at")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdAt;
 
     public Product() {
     }

@@ -1,65 +1,27 @@
 package com.coderhouse.clientservice.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
 
+/**
+ * Model class representing the World Clock.
+ * It captures various time-related details obtained from an external World Clock API.
+ * This class is used to deserialize JSON data from the API into a Java object.
+ * <p>
+ * The class is annotated with @JsonIgnoreProperties to ignore any unknown properties
+ * in the JSON response, ensuring only defined fields are mapped.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Data
 public class WorldClock {
 
-    //private String $id;
-    private String currentDateTime;
-    private String utcOffset;
-    private Boolean isDayLightSavingsTime;
-    private String dayOfTheWeek;
-    private String timeZoneName;
-    private Long currentFileTime;
-    private String ordinalDate;
-    private String serviceResponse;
-    public String getCurrentDateTime() {
-        return currentDateTime;
-    }
-    public void setCurrentDateTime(String currentDateTime) {
-        this.currentDateTime = currentDateTime;
-    }
-    public String getUtcOffset() {
-        return utcOffset;
-    }
-    public void setUtcOffset(String utcOffset) {
-        this.utcOffset = utcOffset;
-    }
-    public Boolean getIsDayLightSavingsTime() {
-        return isDayLightSavingsTime;
-    }
-    public void setIsDayLightSavingsTime(Boolean isDayLightSavingsTime) {
-        this.isDayLightSavingsTime = isDayLightSavingsTime;
-    }
-    public String getDayOfTheWeek() {
-        return dayOfTheWeek;
-    }
-    public void setDayOfTheWeek(String dayOfTheWeek) {
-        this.dayOfTheWeek = dayOfTheWeek;
-    }
-    public String getTimeZoneName() {
-        return timeZoneName;
-    }
-    public void setTimeZoneName(String timeZoneName) {
-        this.timeZoneName = timeZoneName;
-    }
-    public Long getCurrentFileTime() {
-        return currentFileTime;
-    }
-    public void setCurrentFileTime(Long currentFileTime) {
-        this.currentFileTime = currentFileTime;
-    }
-    public String getOrdinalDate() {
-        return ordinalDate;
-    }
-    public void setOrdinalDate(String ordinalDate) {
-        this.ordinalDate = ordinalDate;
-    }
-    public String getServiceResponse() {
-        return serviceResponse;
-    }
-    public void setServiceResponse(String serviceResponse) {
-        this.serviceResponse = serviceResponse;
-    }
+    // Attributes representing different components of the world clock time
+    private String currentDateTime;       // Current date and time in UTC
+    private String utcOffset;             // Offset from UTC
+    private Boolean isDayLightSavingsTime; // Indicator of daylight saving time
+    private String dayOfTheWeek;          // Current day of the week
+    private String timeZoneName;          // Name of the time zone
+    private Long currentFileTime;         // File time in long format
+    private String ordinalDate;           // Date in ordinal format
+    private String serviceResponse;       // Response from the World Clock service
 }

@@ -1,12 +1,26 @@
 package com.coderhouse.clientservice.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * Entity class representing an invoice in the online store system.
+ * This class maps to the 'invoices' table in the database and includes
+ * fields for invoice details such as client ID, total amount, and invoice items.
+ * <p>
+ * It is associated with the InvoiceDetail class for item details.
+ * <p>
+ * <p>
+ * The @Data annotation from Lombok automatically generates getters, setters,
+ * and other common methods like equals, hashCode, and toString.
+ * <p>
+ * @author: Carolina Pereira
+ */
 @Data
 @Entity
 @Table(name = "invoices")
@@ -24,11 +38,20 @@ public class Invoice {
 
     @Column(name = "total")
     private BigDecimal total;
-
-    @Column(name = "created_at")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdAt;
-
     public Invoice() {
     }
+
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
+    private List<InvoiceDetail> details;
+
+    public void addDetail(InvoiceDetail detail) {
+        if (this.details == null) {
+            this.details = new ArrayList<>();
+        }
+        this.details.add(detail);
+        detail.setInvoice(this);
+    }
+
+    @Column(name = "created_at")
+    private OffsetDateTime createdAt;
 }

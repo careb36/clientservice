@@ -1,7 +1,6 @@
 package com.coderhouse.clientservice.controller;
 
 import com.coderhouse.clientservice.dto.ClientDTO;
-import com.coderhouse.clientservice.model.Client;
 import com.coderhouse.clientservice.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,10 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 /**
- * REST controller for managing client-related operations.
- * This controller handles HTTP requests for operations on the Client entity,
- * including creation, retrieval, updating, and deletion of clients.
+ * REST controller for managing {@link ClientDTO}.
+ * This controller provides endpoints for CRUD operations on clients.
  */
 @RestController
 @RequestMapping("/api/clients")
@@ -21,8 +21,8 @@ public class ClientController {
     private final ClientService clientService;
 
     /**
-     * Autowired constructor for dependency injection of ClientService.
-     * @param clientService The service layer dependency for client operations.
+     * Constructs a ClientController with the given ClientService.
+     * @param clientService The service to manage client data operations.
      */
     @Autowired
     public ClientController(ClientService clientService) {
@@ -30,25 +30,22 @@ public class ClientController {
     }
 
     /**
-     * Endpoint for creating a new client.
-     * Accepts a client object in the request body, validates it, and saves it using the client service.
+     * Creates a new client.
      *
-     * @param client The client object to be created, validated by @Valid annotation.
-     * @return ResponseEntity containing the created ClientDTO and HTTP status CREATED.
+     * @param clientDTO The client data transfer object to create.
+     * @return ResponseEntity with the created client and HTTP status.
      */
-    @Valid
     @PostMapping
-    public ResponseEntity<ClientDTO> createClient(@Valid @RequestBody Client client) {
-        ClientDTO newClient = clientService.create(client);
+    public ResponseEntity<ClientDTO> createClient(@Valid @RequestBody ClientDTO clientDTO) {
+        ClientDTO newClient = clientService.create(clientDTO);
         return new ResponseEntity<>(newClient, HttpStatus.CREATED);
     }
 
     /**
-     * Endpoint for retrieving a client by ID.
-     * Fetches client details from the client service based on the provided ID.
+     * Retrieves a client by ID.
      *
-     * @param id The ID of the client to be retrieved.
-     * @return ResponseEntity containing the ClientDTO and HTTP status OK.
+     * @param id The ID of the client to retrieve.
+     * @return ResponseEntity with the found client and HTTP status.
      */
     @GetMapping("/{id}")
     public ResponseEntity<ClientDTO> getClientById(@PathVariable Long id) {
@@ -57,31 +54,38 @@ public class ClientController {
     }
 
     /**
-     * Endpoint for updating an existing client.
-     * Updates client details based on the provided ID and request body.
+     * Retrieves all clients.
      *
-     * @param id            The ID of the client to be updated.
-     * @param clientDetails The client object containing updated fields, validated by @Valid annotation.
-     * @return ResponseEntity containing the updated ClientDTO and HTTP status OK.
+     * @return ResponseEntity with the list of all clients and HTTP status.
      */
-    @Valid
+    @GetMapping
+    public ResponseEntity<List<ClientDTO>> getAllClients() {
+        List<ClientDTO> clients = clientService.findAll();
+        return new ResponseEntity<>(clients, HttpStatus.OK);
+    }
+
+    /**
+     * Updates a client by ID.
+     *
+     * @param id        The ID of the client to update.
+     * @param clientDTO The updated client data transfer object.
+     * @return ResponseEntity with the updated client and HTTP status.
+     */
     @PutMapping("/{id}")
-    public ResponseEntity<ClientDTO> updateClient(@PathVariable Long id, @Valid @RequestBody Client clientDetails) {
-        ClientDTO updatedClient = clientService.update(id, clientDetails);
+    public ResponseEntity<ClientDTO> updateClient(@PathVariable Long id, @Valid @RequestBody ClientDTO clientDTO) {
+        ClientDTO updatedClient = clientService.update(id, clientDTO);
         return new ResponseEntity<>(updatedClient, HttpStatus.OK);
     }
 
     /**
-     * Endpoint for deleting a client by ID.
-     * Removes the client associated with the provided ID using the client service.
+     * Deletes a client by ID.
      *
-     * @param id The ID of the client to be deleted.
-     * @return ResponseEntity with HTTP status NO_CONTENT.
+     * @param id The ID of the client to delete.
+     * @return ResponseEntity with HTTP status.
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
         clientService.delete(id);
         return ResponseEntity.noContent().build();
     }
-
 }

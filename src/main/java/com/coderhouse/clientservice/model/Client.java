@@ -72,9 +72,4 @@ public class Client {
     @Column(name = "telephone")
     private String telephone;
 
-    /**
-     * The timestamp when the client record was created. Automatically set by the system.
-     */
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
 }

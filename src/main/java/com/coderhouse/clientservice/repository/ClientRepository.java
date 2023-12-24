@@ -4,12 +4,11 @@ import com.coderhouse.clientservice.model.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * Spring Data JPA repository for the Client entity.
- * This interface provides CRUD operations and query methods for Client objects.
- * It extends JpaRepository, leveraging Spring Data's repository abstraction.
+ * Repository interface for the Client entity.
+ * This interface is a part of the Spring Data JPA infrastructure for data access.
+ * It extends JpaRepository, providing CRUD operations and additional query methods for Client objects.
  */
 public interface ClientRepository extends JpaRepository<Client, Long> {
 
-    // Standard CRUD operations and any custom queries can be defined here.
-    // Since it extends JpaRepository, basic CRUD methods are already provided.
+    // Basic CRUD operations for Product entity are automatically provided by JpaRepository.
 }
