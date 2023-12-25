@@ -40,12 +40,8 @@ Example: Updating non-existent customer information.
    git clone [repository URL]
    mvn spring-boot:run
 
-##### The application will be available at http://localhost:9500
-
 ## API Documentation
 Access comprehensive API documentation at: http://localhost:9500/swagger-ui/index.html
-
-This update provides a detailed markdown overview of the application's key features, functionalities, REST services, and the usage of HTTP status codes for efficient API interaction.
 
 ## Configuration
 Configure database connection and other properties in src/main/resources/application.properties.
