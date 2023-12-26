@@ -1,7 +1,6 @@
 package com.coderhouse.clientservice.service;
 
 import com.coderhouse.clientservice.dto.ProductDTO;
-import com.coderhouse.clientservice.exception.InsufficientStockException;
 import com.coderhouse.clientservice.exception.ProductNotFoundException;
 import com.coderhouse.clientservice.model.Product;
 import com.coderhouse.clientservice.repository.ProductRepository;
@@ -17,6 +16,7 @@ import java.util.stream.Collectors;
  * converting between DTOs and entity models as needed.
  * It interacts with ProductRepository for database operations.
  * <p>
+ *
  * @author: Carolina Pereira
  */
 @Service
@@ -41,13 +41,25 @@ public class ProductService {
         return convertToDTO(savedProduct);
     }
 
+    /**
+     * Creates multiple products in the system.
+     * Converts each provided ProductDTO to a Product entity and saves them to the database.
+     * @param productDTOs List of product data transfer objects.
+     * @return List of the created products as DTOs.
+     */
+    public List<ProductDTO> createProducts(List<ProductDTO> productDTOs) {
+        return productDTOs.stream()
+                .map(this::create)
+                .collect(Collectors.toList());
+    }
+
     public ProductDTO findById(int id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with ID: " + id));
         return convertToDTO(product);
     }
 
-    public List<ProductDTO> findAll() {
+    public List<ProductDTO> findAllActive() {
         return productRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -66,17 +78,25 @@ public class ProductService {
      * Updates the stock of a product.
      * Throws InsufficientStockException if the stock is not enough for the sale.
      *
-     * @param productId The ID of the product.
+     * @param productId    The ID of the product.
      * @param quantitySold The quantity of the product sold.
      */
-    public void updateStock(int productId, int quantitySold) {
+    public int updateStock(int productId, int quantitySold) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with ID: " + productId));
         int newStock = product.getStock() - quantitySold;
         if (newStock < 0) {
-            throw new InsufficientStockException("Insufficient stock for product ID: " + productId);
+            throw new RuntimeException("Insufficient stock for product ID: " + productId);
         }
         product.setStock(newStock);
+        productRepository.save(product);
+        return newStock;
+    }
+
+    public void delete(int id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with ID: " + id));
+        product.setActive(false);
         productRepository.save(product);
     }
 
@@ -107,6 +127,9 @@ public class ProductService {
         product.setStock(dto.getStock());
     }
 
-    public void delete(int id) {
+    public int getCurrentStock(int productId) {
+        Product product = productRepository.findById(productId)
+        .orElseThrow(() -> new ProductNotFoundException("Product not found with ID: " + productId));
+        return product.getStock();
     }
 }

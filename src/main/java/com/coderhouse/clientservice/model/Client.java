@@ -5,8 +5,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import java.time.LocalDateTime;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 /**
  * Entity class representing a client in the online store system.
@@ -71,5 +72,8 @@ public class Client {
     @Size(max = 20, message = "Telephone must be less than 20 characters")
     @Column(name = "telephone")
     private String telephone;
+
+    @Column(name = "is_active")
+    private boolean isActive = true;
 
 }

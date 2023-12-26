@@ -41,6 +41,8 @@ public class ClientDTO {
     @Size(max = 20, message = "Telephone must be less than 20 characters")
     private String telephone;
 
+    private boolean isActive;
+
     // Lombok will automatically generate the getters and setters for all fields
 }
 

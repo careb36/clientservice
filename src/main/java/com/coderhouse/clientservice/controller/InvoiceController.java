@@ -63,6 +63,6 @@ public class InvoiceController {
         List<InvoiceDTO> invoices = invoiceService.findAll();
         return new ResponseEntity<>(invoices, HttpStatus.OK);
     }
-    // Additional endpoints for update and delete operations can be added here.
+
 }
 

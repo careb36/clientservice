@@ -16,6 +16,7 @@ import java.util.Optional;
  * This class provides functionality to create and retrieve invoice details,
  * converting between DTOs and entity models as needed.
  * It interacts with InvoiceDetailRepository and InvoiceRepository for database operations.
+ *
  * @author: Carolina Pereira
  */
 @Service
@@ -64,16 +65,24 @@ public class InvoiceDetailService {
      */
     private InvoiceDetail convertToEntity(InvoiceDetailsDTO dto) {
         InvoiceDetail invoiceDetail = new InvoiceDetail();
-        Optional<Invoice> invoice = invoiceRepository.findById(dto.getInvoiceId());
-        if (invoice.isEmpty()) {
+
+        Optional<Invoice> invoiceOpt = invoiceRepository.findById(dto.getInvoiceId());
+        if (invoiceOpt.isEmpty()) {
             throw new InvoiceNotFoundException("Invoice not found with ID: " + dto.getInvoiceId());
         }
+
+        Invoice invoice = invoiceOpt.get();
+
+        invoiceDetail.setInvoice(invoice);
+
         invoiceDetail.setProductId(dto.getProductId());
         invoiceDetail.setQuantity(dto.getQuantity());
         invoiceDetail.setPrice(dto.getPrice());
         invoiceDetail.setDescription(dto.getDescription());
+
         return invoiceDetail;
     }
+
 
     /**
      * Converts an InvoiceDetail entity to an InvoiceDetailsDTO.

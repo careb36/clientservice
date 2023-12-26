@@ -7,6 +7,7 @@ import com.coderhouse.clientservice.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,17 +43,14 @@ public class ClientService {
         return convertToDTO(savedClient);
     }
 
-    private Client convertToEntity(ClientDTO clientDTO) {
-        Client client = new Client();
-        client.setName(clientDTO.getName());
-        client.setLastName(clientDTO.getLastName());
-        if (clientDTO.getBirthDate() != null) {
-            client.setBirthDate(clientDTO.getBirthDate().atStartOfDay());
+    public List<ClientDTO> createClients(List<ClientDTO> clientDTOs) {
+        List<ClientDTO> savedClients = new ArrayList<>();
+        for (ClientDTO clientDTO : clientDTOs) {
+            Client client = convertToEntity(clientDTO);
+            Client savedClient = clientRepository.save(client);
+            savedClients.add(convertToDTO(savedClient));
         }
-        client.setEmail(clientDTO.getEmail());
-        client.setAddress(clientDTO.getAddress());
-        client.setTelephone(clientDTO.getTelephone());
-        return client;
+        return savedClients;
     }
 
     public List<ClientDTO> findAll() {
@@ -77,7 +75,10 @@ public class ClientService {
     }
 
     public void delete(Long id) {
-        clientRepository.deleteById(id);
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new ClientNotFoundException("Client not found with ID: " + id));
+        client.setActive(false);
+        clientRepository.save(client);
     }
 
     /**
@@ -99,5 +100,17 @@ public class ClientService {
         dto.setAddress(client.getAddress());
         dto.setTelephone(client.getTelephone());
         return dto;
+    }
+    private Client convertToEntity(ClientDTO clientDTO) {
+        Client client = new Client();
+        client.setName(clientDTO.getName());
+        client.setLastName(clientDTO.getLastName());
+        if (clientDTO.getBirthDate() != null) {
+            client.setBirthDate(clientDTO.getBirthDate().atStartOfDay());
+        }
+        client.setEmail(clientDTO.getEmail());
+        client.setAddress(clientDTO.getAddress());
+        client.setTelephone(clientDTO.getTelephone());
+        return client;
     }
 }

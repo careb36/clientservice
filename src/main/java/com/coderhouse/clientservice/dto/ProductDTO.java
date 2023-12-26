@@ -32,6 +32,8 @@ public class ProductDTO {
     @Min(value = 0, message = "Stock cannot be less than 0")
     private int stock;
 
+    private boolean isActive;
+
     private LocalDateTime createdAt;
 
     // Lombok will automatically generate the getters and setters for all fields

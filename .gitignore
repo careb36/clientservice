@@ -29,10 +29,6 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### IntelliJ IDEA ###
-.idea/
 ### VS Code ###
 .vscode/
 
-### Ignorar application.properties ###
-**/application.properties

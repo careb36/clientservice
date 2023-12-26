@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * REST controller for managing {@link ProductDTO}.
- * This controller offers endpoints for CRUD operations on products.
+ * Controller for handling requests related to products.
+ * Provides endpoints for CRUD operations on products.
  */
 @RestController
 @RequestMapping("/api/products")
@@ -44,6 +44,19 @@ public class ProductController {
     }
 
     /**
+     * Endpoint to create multiple products in bulk.
+     * Receives a list of ProductDTOs, persists them, and returns the created products.
+     *
+     * @param productDTOs List of Data Transfer Objects representing products.
+     * @return ResponseEntity containing the list of created products and HTTP status code.
+     */
+    @PostMapping("/bulk")
+    public ResponseEntity<List<ProductDTO>> createProducts(@RequestBody List<ProductDTO> productDTOs) {
+        List<ProductDTO> newProducts = productService.createProducts(productDTOs);
+        return new ResponseEntity<>(newProducts, HttpStatus.CREATED);
+    }
+
+    /**
      * Endpoint to retrieve a product by its ID.
      * Searches and returns the product if found.
      *
@@ -63,8 +76,8 @@ public class ProductController {
      * @return ResponseEntity containing the list of products and HTTP status code.
      */
     @GetMapping
-    public ResponseEntity<List<ProductDTO>> getAllProducts() {
-        List<ProductDTO> products = productService.findAll();
+    public ResponseEntity<List<ProductDTO>> getAllActiveProducts() {
+        List<ProductDTO> products = productService.findAllActive();
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
@@ -72,7 +85,7 @@ public class ProductController {
      * Endpoint to update a product.
      * Updates the product with the given ID and returns the updated product.
      *
-     * @param id The ID of the product to update.
+     * @param id         The ID of the product to update.
      * @param productDTO The updated product data.
      * @return ResponseEntity containing the updated product and HTTP status code.
      */

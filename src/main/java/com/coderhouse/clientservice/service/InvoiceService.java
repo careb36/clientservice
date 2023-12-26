@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,23 +51,28 @@ public class InvoiceService {
         Invoice invoice = new Invoice();
         invoice.setClientId(invoiceDTO.getClientId());
 
-        BigDecimal total = invoiceDTO.getInvoiceDetails().stream()
-                .map(detail -> detail.getPrice().multiply(BigDecimal.valueOf(detail.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal total = BigDecimal.ZERO;
+
+        List<InvoiceDetail> invoiceDetails = new ArrayList<>();
+
+        for (InvoiceDetailsDTO detailDTO : invoiceDTO.getInvoiceDetails()) {
+            int stockAfterSale = productService.updateStock(detailDTO.getProductId(), detailDTO.getQuantity());
+            detailDTO.setStock(stockAfterSale);
+
+            BigDecimal lineTotal = detailDTO.getPrice().multiply(BigDecimal.valueOf(detailDTO.getQuantity()));
+            total = total.add(lineTotal);
+
+            InvoiceDetail detail = convertDetailDTOToEntity(detailDTO);
+            invoiceDetails.add(detail);
+        }
 
         invoice.setTotal(total);
         invoice.setCreatedAt(OffsetDateTime.now());
 
-        List<InvoiceDetail> invoiceDetails = invoiceDTO.getInvoiceDetails().stream()
-                .map(this::convertDetailDTOToEntity)
-                .toList();
-
-        invoiceDetails.forEach(detail -> {
-            productService.updateStock(detail.getProductId(), detail.getQuantity());
-            invoice.addDetail(detail);
-        });
+        invoiceDetails.forEach(invoice::addDetail);
 
         Invoice savedInvoice = invoiceRepository.save(invoice);
+
         return convertToDTO(savedInvoice);
     }
 
@@ -77,7 +83,8 @@ public class InvoiceService {
     }
 
     public List<InvoiceDTO> findAll() {
-        return invoiceRepository.findAll().stream()
+        List<Invoice> invoices = invoiceRepository.findAll();
+        return invoices.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -102,9 +109,10 @@ public class InvoiceService {
         dto.setClientId(invoice.getClientId());
         dto.setTotal(invoice.getTotal());
         dto.setCreatedAt(invoice.getCreatedAt());
-        dto.setInvoiceDetails(invoice.getDetails().stream()
+        List<InvoiceDetailsDTO> detailsDto = invoice.getDetails().stream()
                 .map(this::convertDetailToDTO)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+        dto.setInvoiceDetails(detailsDto);
         return dto;
     }
 
@@ -117,19 +125,21 @@ public class InvoiceService {
         return detail;
     }
 
-    // Método para convertir InvoiceDetail a InvoiceDetailsDTO
     private InvoiceDetailsDTO convertDetailToDTO(InvoiceDetail detail) {
         InvoiceDetailsDTO dto = new InvoiceDetailsDTO();
         dto.setId(detail.getId());
-        if (detail.getInvoice() != null) {
-            dto.setInvoiceId(detail.getInvoice().getId()); // Obtener el ID de la factura asociada
-        }
+        dto.setInvoiceId(detail.getInvoice().getId());
         dto.setProductId(detail.getProductId());
         dto.setQuantity(detail.getQuantity());
         dto.setPrice(detail.getPrice());
         dto.setDescription(detail.getDescription());
+
+        int currentStock = productService.getCurrentStock(detail.getProductId());
+        dto.setStock(currentStock);
+
         return dto;
     }
+
 
     private void updateProductStock(InvoiceDetail detail) {
         productService.updateStock(detail.getProductId(), detail.getQuantity());
