@@ -39,6 +39,8 @@ public class Product {
     @Column(name = "stock")
     private int stock;
 
+    @Column(name = "is_active")
+    private boolean isActive = true;
     public Product() {
     }
 }

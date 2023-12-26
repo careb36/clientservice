@@ -40,6 +40,12 @@ public class ClientController {
         ClientDTO newClient = clientService.create(clientDTO);
         return new ResponseEntity<>(newClient, HttpStatus.CREATED);
     }
+    @PostMapping("/bulk")
+    public ResponseEntity<List<ClientDTO>> createClients(@Valid @RequestBody List<ClientDTO> clientDTOs) {
+        List<ClientDTO> newClients = clientService.createClients(clientDTOs);
+        return new ResponseEntity<>(newClients, HttpStatus.CREATED);
+    }
+
 
     /**
      * Retrieves a client by ID.

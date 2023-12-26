@@ -34,6 +34,8 @@ public class InvoiceDetailsDTO {
     @Size(max = 100, message = "Description must be less than 100 characters")
     private String description;
 
+    private int stock;
+
     private LocalDateTime createdAt;
 
     // Lombok will automatically generate the getters and setters for all fields

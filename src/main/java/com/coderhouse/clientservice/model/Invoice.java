@@ -41,7 +41,7 @@ public class Invoice {
     public Invoice() {
     }
 
-    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<InvoiceDetail> details;
 
     public void addDetail(InvoiceDetail detail) {
